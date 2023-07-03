@@ -14,6 +14,13 @@ class PlotResource extends JsonResource
      */
     public function toArray($request)
     {
-        return parent::toArray($request);
+        return [
+            'id'            => intval($this->id),
+            'status'        => intval($this->status),
+            'name'          => $this->name,
+            'hectare'       => floatval($this->hectare),
+            'site'          => new SiteResource($this->site),
+            'user'          => new UserResource($this->user),
+        ];
     }
 }
