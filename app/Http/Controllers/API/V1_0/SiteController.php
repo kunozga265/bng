@@ -19,9 +19,7 @@ class SiteController extends Controller
     public function index(): \Illuminate\Http\JsonResponse
     {
         $sites = Site::orderBy('name', 'asc')->get();
-        return response()->json([
-            new SiteCollection($sites)
-        ]);
+        return response()->json(new SiteCollection($sites));
     }
 
     /**
@@ -32,9 +30,7 @@ class SiteController extends Controller
     public function plots($id)
     {
         $site = Site::findOrFail($id);
-        return response()->json([
-            PlotResource::collection($site->plots)
-        ]);
+        return response()->json(PlotResource::collection($site->plots));
     }
 
     /**
