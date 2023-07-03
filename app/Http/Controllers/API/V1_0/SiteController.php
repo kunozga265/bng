@@ -3,6 +3,7 @@
 namespace App\Http\Controllers\API\V1_0;
 
 use App\Http\Controllers\Controller;
+use App\Http\Resources\PlotResource;
 use App\Http\Resources\SiteCollection;
 use App\Http\Resources\SiteResource;
 use App\Models\Site;
@@ -17,9 +18,22 @@ class SiteController extends Controller
      */
     public function index(): \Illuminate\Http\JsonResponse
     {
-        $sites = Site::all();
+        $sites = Site::orderBy('name', 'asc')->get();
         return response()->json([
             'sites' => new SiteCollection($sites)
+        ]);
+    }
+
+    /**
+     * Display a listing of the resource.
+     *
+     * @return \Illuminate\Http\JsonResponse
+     */
+    public function plots($id)
+    {
+        $site = Site::findOrFail($id);
+        return response()->json([
+            'plots'  => PlotResource::collection($site->plots)
         ]);
     }
 
