@@ -65,18 +65,15 @@ class UserController extends Controller
         ]);
 
         $user=User::create([
-            "firstName"     => ucwords($request->firstName),
-            "middleName"    => ucwords($request->middleName),
-            "lastName"      => ucwords($request->lastName),
+            "first_name"     => ucwords($request->firstName),
+            "middle_name"    => ucwords($request->middleName),
+            "last_name"      => ucwords($request->lastName),
             "email"         => $request->email,
             "phone_number"  => $request->phone_number,
             "password"      => bcrypt($request->password),
             "national_id"   => $request->national_id,
             "role_id"       => $request->role_id,
         ]);
-
-        $role=Role::where('name','unverified')->first();
-        $user->roles()->attach($role);
 
 //        $token=$user->createToken($request->device_name)->plainTextToken;
         //Email new user with credentials
