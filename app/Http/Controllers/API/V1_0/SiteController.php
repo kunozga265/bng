@@ -20,7 +20,7 @@ class SiteController extends Controller
     {
         $sites = Site::orderBy('name', 'asc')->get();
         return response()->json([
-            'sites' => new SiteCollection($sites)
+            new SiteCollection($sites)
         ]);
     }
 
@@ -33,7 +33,7 @@ class SiteController extends Controller
     {
         $site = Site::findOrFail($id);
         return response()->json([
-            'plots'  => PlotResource::collection($site->plots)
+            PlotResource::collection($site->plots)
         ]);
     }
 
