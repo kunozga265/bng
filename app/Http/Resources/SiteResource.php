@@ -22,6 +22,7 @@ class SiteResource extends JsonResource
 
         return [
             'id'                => $this->id,
+            'name'              => $this->name,
             'plot_width'        => $this->plot_width,
             'plot_height'       => $this->plot_height,
             'plot_price'        => $this->plot_price,
