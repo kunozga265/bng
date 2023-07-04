@@ -33,7 +33,7 @@ class UserController extends Controller
 
         if (! $user || ! Hash::check($request->password, $user->password)) {
             throw ValidationException::withMessages([
-                'The provided credentials are incorrect.',
+                'email' => ['The provided credentials are incorrect.'],
             ]);
         }
         $token=$user->createToken($request->device_name)->plainTextToken;
