@@ -21,19 +21,19 @@ class SiteResource extends JsonResource
         $status = $sold_plots > 0 ? 1 : 0;
 
         return [
-            'id'                => $this->id,
+            'id'                => intval($this->id),
             'name'              => $this->name,
-            'plot_width'        => $this->plot_width,
-            'plot_height'       => $this->plot_height,
-            'plot_price'        => $this->plot_price,
+            'plot_width'        => floatval($this->plot_width),
+            'plot_height'       => floatval($this->plot_height),
+            'plot_price'        => floatval($this->plot_price),
             'location'          => $this->location,
             'district'          => $this->district,
             'layout'            => $this->layout,
-            'status'            => $status,
-            'available_plots'   => $available_plots,
-            'negotiating_plots' => $negotiating_plots,
-            'sold_plots'        => $sold_plots,
-            'all_plots'         => $all_plots,
+            'status'            => intval($status),
+            'available_plots'   => intval($available_plots),
+            'negotiating_plots' => intval($negotiating_plots),
+            'sold_plots'        => intval($sold_plots),
+            'all_plots'         => intval($all_plots),
         ];
     }
 }
