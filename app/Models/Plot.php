@@ -18,4 +18,11 @@ class Plot extends Model
     {
         return $this->belongsTo(Site::class);
     }
+
+    protected $fillable=[
+        'name',
+        'status',
+        'site_id',
+        'coordinates',
+    ];
 }
