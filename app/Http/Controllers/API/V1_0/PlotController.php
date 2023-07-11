@@ -8,9 +8,13 @@ use App\Models\Plot;
 use App\Models\Site;
 use App\Models\User;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Auth;
 
 class PlotController extends Controller
 {
+    const AVAILABLE_STATUS = 1;
+    const NEGOTIATING_STATUS = 2;
+    const SOLD_STATUS = 3;
     /**
      * Display a listing of the resource.
      *
@@ -61,6 +65,75 @@ class PlotController extends Controller
            'plot'       => new PlotResource($plot),
            'message'    => "Successfully added"
         ]);
+    }
+
+    /**
+     * Store a newly created resource in storage.
+     *
+     * @param  \Illuminate\Http\Request  $request
+     * @return \Illuminate\Http\JsonResponse
+     */
+    public function negotiate(Request $request, $id)
+    {
+        $plot = Plot::findOrFail($id);
+
+        $plot->update([
+            'status'        => self::NEGOTIATING_STATUS,
+            'user_id'       => Auth::id(),
+        ]);
+
+        return response()->json([
+//            'plot'       => new PlotResource($plot),
+            'message'    => "Successfully updated. Plot under negotiation."
+        ]);
+
+    }
+
+    /**
+     * Store a newly created resource in storage.
+     *
+     * @param  \Illuminate\Http\Request  $request
+     * @return \Illuminate\Http\JsonResponse
+     */
+    public function cancelNegotiation(Request $request, $id)
+    {
+        $plot = Plot::findOrFail($id);
+
+        $plot->update([
+            'status'        => self::AVAILABLE_STATUS,
+            'user_id'       => null,
+        ]);
+
+        return response()->json([
+//            'plot'       => new PlotResource($plot),
+            'message'    => "Successfully updated. Plot Available."
+        ]);
+
+    }
+
+    /**
+     * Store a newly created resource in storage.
+     *
+     * @param  \Illuminate\Http\Request  $request
+     * @return \Illuminate\Http\JsonResponse
+     */
+    public function sell(Request $request, $id)
+    {
+        $plot = Plot::findOrFail($id);
+        $request->validate([
+           'user_id'    => 'required'
+        ]);
+
+        $plot->update([
+            'status'        => self::AVAILABLE_STATUS,
+            'user_id'       => $request->user_id,
+        ]);
+
+        return response()->json([
+//            'plot'       => new PlotResource($plot),
+            'message'    => "Successfully updated to sold."
+        ]);
+
     }
 
     /**

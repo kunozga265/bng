@@ -43,6 +43,13 @@ Route::group(['prefix' => '1.0'],function () {
             Route::get('/{id}/plots', [SiteController::class, 'plots']);
         });
 
+        Route::group(['prefix' => 'plots'], function () {
+            Route::post('/negotiate/{id}', [PlotController::class, 'negotiate']);
+            Route::post('/cancel-negotiation/{id}', [PlotController::class, 'cancelNegotiation']);
+            Route::post('/sell/{id}', [PlotController::class, 'sell']);
+
+        });
+
     });
 
 //    Route::group(['prefix' => 'bookings', 'middleware'=>'auth:sanctum'], function () {
