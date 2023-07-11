@@ -23,6 +23,6 @@ class Plot extends Model
         'name',
         'status',
         'site_id',
-        'coordinates',
+        'user_id',
     ];
 }
