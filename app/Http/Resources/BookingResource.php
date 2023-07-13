@@ -16,7 +16,7 @@ class BookingResource extends JsonResource
     {
         return [
             'id'            => intval($this->id),
-            'site'          => $this->site,
+            'site'          => new SiteResource($this->site),
             'from'          => intval($this->from),
             'to'            => intval($this->to),
             'user'          => new UserResource($this->user),
