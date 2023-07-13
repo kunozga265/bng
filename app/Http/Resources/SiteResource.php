@@ -38,7 +38,6 @@ class SiteResource extends JsonResource
             'sold_plots'        => intval($sold_plots),
             'all_plots'         => intval($all_plots),
             'totalBookingsCount'=> intval($this->bookings()->count()),
-            'bookings'          => BookingResource::collection($bookings),
         ];
     }
 }
