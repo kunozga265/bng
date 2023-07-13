@@ -2,6 +2,7 @@
 
 namespace App\Http\Resources;
 
+use Carbon\Carbon;
 use Illuminate\Http\Resources\Json\JsonResource;
 
 class SiteResource extends JsonResource
@@ -19,6 +20,8 @@ class SiteResource extends JsonResource
         $sold_plots = $this->plots()->where('status',3)->count();
         $all_plots = $this->plots()->count();
         $status = $sold_plots > 0 ? 1 : 0;
+        $now = Carbon::now()->getTimestamp();
+        $bookings = $this->bookings()->where('from','>=', $now)->get();
 
         return [
             'id'                => intval($this->id),
@@ -34,6 +37,8 @@ class SiteResource extends JsonResource
             'negotiating_plots' => intval($negotiating_plots),
             'sold_plots'        => intval($sold_plots),
             'all_plots'         => intval($all_plots),
+            'totalBookingsCount'=> intval($this->bookings()->count()),
+            'bookings'          => BookingResource::collection($bookings),
         ];
     }
 }

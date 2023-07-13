@@ -14,6 +14,12 @@ class BookingResource extends JsonResource
      */
     public function toArray($request)
     {
-        return parent::toArray($request);
+        return [
+            'id'            => $this->id,
+            'site'          => $this->site,
+            'from'          => $this->from,
+            'to'            => $this->to,
+            'user'          => new UserResource($this->user),
+        ];
     }
 }

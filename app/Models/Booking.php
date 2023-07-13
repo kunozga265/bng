@@ -13,4 +13,16 @@ class Booking extends Model
     {
         return $this->belongsTo(User::class);
     }
+
+    public function site()
+    {
+        return $this->belongsTo(Site::class);
+    }
+
+    protected $fillable=[
+      'user_id',
+      'site_id',
+      'from',
+      'to',
+    ];
 }

@@ -1,6 +1,7 @@
 <?php
 
 use App\Http\Controllers\API\V1_0\AppController;
+use App\Http\Controllers\API\V1_0\BookingController;
 use App\Http\Controllers\API\V1_0\PlotController;
 use App\Http\Controllers\API\V1_0\SiteController;
 use App\Http\Controllers\API\V1_0\UserController;
@@ -47,6 +48,14 @@ Route::group(['prefix' => '1.0'],function () {
             Route::post('/negotiate/{id}', [PlotController::class, 'negotiate']);
             Route::post('/cancel-negotiation/{id}', [PlotController::class, 'cancelNegotiation']);
             Route::post('/sell/{id}', [PlotController::class, 'sell']);
+
+        });
+
+        Route::group(['prefix' => 'bookings'], function () {
+            Route::get('/', [BookingController::class, 'index']);
+            Route::get('/{id}', [BookingController::class, 'indexBySite']);
+            Route::post('/', [BookingController::class, 'store']);
+            Route::delete('/{id}', [BookingController::class, 'destroy']);
 
         });
 

@@ -14,6 +14,11 @@ class Site extends Model
         return $this->hasMany(Plot::class);
     }
 
+    public function bookings()
+    {
+        return $this->hasMany(Booking::class);
+    }
+
     protected $fillable=[
         'name',
         'location',
