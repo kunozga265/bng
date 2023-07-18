@@ -19,7 +19,7 @@ class SiteResource extends JsonResource
         $negotiating_plots = $this->plots()->where('status',2)->count();
         $sold_plots = $this->plots()->where('status',3)->count();
         $all_plots = $this->plots()->count();
-        $status = $sold_plots > 0 ? 1 : 0;
+        $status = $available_plots > 0 ? 1 : 0;
         $now = Carbon::now()->getTimestamp();
         $bookings = $this->bookings()->where('from','>=', $now)->get();
 
