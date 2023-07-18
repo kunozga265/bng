@@ -22,7 +22,7 @@ class BookingController extends Controller
     public function index()
     {
         $now = Carbon::now()->getTimestamp();
-        $bookings = Booking::where('from','>=', $now)->get();
+        $bookings = Booking::where('from','>=', $now)->orderBy("from","asc")->get();
         return response()->json( new BookingCollection($bookings));
     }
     /**
@@ -34,7 +34,7 @@ class BookingController extends Controller
     {
         $site = Site::findOrFail($id);
         $now = Carbon::now()->getTimestamp();
-        $bookings = $site->bookings()->where('from','>=', $now)->get();
+        $bookings = $site->bookings()->where('from','>=', $now)->orderBy("from","asc")->get();
         return response()->json( new BookingCollection($bookings));
     }
 
