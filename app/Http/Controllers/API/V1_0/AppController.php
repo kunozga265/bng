@@ -9,8 +9,10 @@ use App\Http\Resources\SiteResource;
 use App\Models\Booking;
 use App\Models\Plot;
 use App\Models\Site;
+use App\Models\User;
 use Carbon\Carbon;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Auth;
 
 class AppController extends Controller
 {
@@ -21,11 +23,16 @@ class AppController extends Controller
      */
     public function index()
     {
+        $user = User::find(Auth::id());
+
         $sites = Site::orderBy('name', 'asc')->get();
         $plots = Plot::where('status',2)->limit(20)->get();
 
         $now = Carbon::now()->getTimestamp();
-        $bookings = Booking::where('from','>=', $now)->orderBy("from","asc")->get();
+        if ($user->hasRole("administrator"))
+            $bookings = Booking::where('from','>=', $now)->orderBy("from","asc")->get();
+        else
+            $bookings = $user->bookings()->where('from','>=', $now)->orderBy("from","asc")->get();
 
         return response()->json([
            'sites'      => SiteResource::collection($sites),
