@@ -33,7 +33,7 @@ class AppController extends Controller
         if ($user->hasRole("administrator"))
             $plots = Plot::where('status',2)->limit(20)->get();
         else
-            $bookings = $user->plots()->where('status',2)->limit(20)->get();
+            $plots = $user->plots()->where('status',2)->limit(20)->get();
 
         return response()->json([
            'sites'      => SiteResource::collection($sites),
