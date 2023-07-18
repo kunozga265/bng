@@ -26,13 +26,14 @@ class AppController extends Controller
         $user = User::find(Auth::id());
 
         $sites = Site::orderBy('name', 'asc')->get();
-        $plots = Plot::where('status',2)->limit(20)->get();
 
         $now = Carbon::now()->getTimestamp();
+        $bookings = Booking::where('from','>=', $now)->orderBy("from","asc")->get();
+
         if ($user->hasRole("administrator"))
-            $bookings = Booking::where('from','>=', $now)->orderBy("from","asc")->get();
+            $plots = Plot::where('status',2)->limit(20)->get();
         else
-            $bookings = $user->bookings()->where('from','>=', $now)->orderBy("from","asc")->get();
+            $bookings = $user->plots()->where('status',2)->limit(20)->get();
 
         return response()->json([
            'sites'      => SiteResource::collection($sites),
