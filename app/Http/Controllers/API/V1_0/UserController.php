@@ -64,9 +64,9 @@ class UserController extends Controller
         ]);
 
         $user=User::create([
-            "first_name"     => ucwords($request->firstName),
-            "middle_name"    => ucwords($request->middleName),
-            "last_name"      => ucwords($request->lastName),
+            "first_name"     => ucwords($request->first_name),
+            "middle_name"    => ucwords($request->middle_name),
+            "last_name"      => ucwords($request->last_name),
             "email"         => $request->email,
             "phone_number"  => $request->phone_number,
             "password"      => bcrypt($request->password),
@@ -78,7 +78,7 @@ class UserController extends Controller
         //Email new user with credentials
 
         return response()->json([
-            'user'  =>  new UserResource($user),
+//            'user'  =>  new UserResource($user),
 //            'token' =>  $token
         ]);
     }
