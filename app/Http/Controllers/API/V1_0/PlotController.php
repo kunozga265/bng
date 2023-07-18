@@ -125,7 +125,7 @@ class PlotController extends Controller
         ]);
 
         $plot->update([
-            'status'        => self::AVAILABLE_STATUS,
+            'status'        => self::SOLD_STATUS,
             'user_id'       => $request->user_id,
         ]);
 
