@@ -25,7 +25,7 @@ class AppController extends Controller
         $plots = Plot::where('status',2)->limit(20)->get();
 
         $now = Carbon::now()->getTimestamp();
-        $bookings = Booking::where('from','>=', $now)->get();
+        $bookings = Booking::where('from','>=', $now)->orderBy("from","asc")->get();
 
         return response()->json([
            'sites'      => SiteResource::collection($sites),
