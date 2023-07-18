@@ -54,8 +54,8 @@ class UserController extends Controller
     public function register(Request $request)
     {
         $request->validate([
-            "firstName"     => ['required','string', 'max:255'],
-            "lastName"      => ['required','string', 'max:255'],
+            "first_name"     => ['required','string', 'max:255'],
+            "last_name"      => ['required','string', 'max:255'],
             "email"         => ['required','unique:users','email','string'],
             "password"      => ['required', 'confirmed', new \Laravel\Fortify\Rules\Password, 'string'],
             'national_id'   => ['required'],
