@@ -61,7 +61,6 @@ class UserController extends Controller
             'national_id'   => ['required'],
             'role_id'       => ['required'],
             'phone_number'  => ['required', 'unique:users'],
-            'device_name'   => ['required'],
         ]);
 
         $user=User::create([
