@@ -124,6 +124,44 @@ class UserController extends Controller
      * @param  int  $id
      * @return \Illuminate\Http\JsonResponse
      */
+    public function updatePassword(Request $request)
+    {
+        $user = User::find(Auth::id());
+        $request->validate([
+            "password"          => ['required', 'confirmed', new Password, 'string'],
+            "password_current"  => ['required', 'string'],
+        ]);
+
+        if(Auth::guard('web')->attempt([
+            'email' => $user->email,
+            'password' => $request->password_current
+        ])){
+            $user->update([
+                "password"      => bcrypt($request->password),
+            ]);
+
+            return response()->json([
+                "message" => "Password successfully updated."
+            ]);
+
+        }else{
+            return response()->json([
+                "message" => "Current password provided is incorrect."
+            ], 400);
+        }
+
+
+
+
+    }
+
+    /**
+     * Update the specified resource in storage.
+     *
+     * @param  \Illuminate\Http\Request  $request
+     * @param  int  $id
+     * @return \Illuminate\Http\JsonResponse
+     */
     public function update(Request $request)
     {
         $user = User::find(Auth::id());

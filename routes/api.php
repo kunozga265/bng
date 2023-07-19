@@ -36,6 +36,8 @@ Route::group(['prefix' => '1.0'],function () {
             "uses" => "App\Http\Controllers\API\V1_0\UserController@update",
             'roles' => ['administrator']
         ])->middleware('auth:sanctum');
+
+        Route::post("/update/password", [UserController::class, 'updatePassword'])->middleware('auth:sanctum');
     });
 
     //Protected Routes
