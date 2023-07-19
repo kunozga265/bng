@@ -9,8 +9,11 @@ use App\Http\Resources\UserResource;
 use App\Models\Role;
 use App\Models\User;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Hash;
+use Illuminate\Validation\Rule;
 use Illuminate\Validation\ValidationException;
+use Laravel\Fortify\Rules\Password;
 
 class UserController extends Controller
 {
@@ -57,8 +60,8 @@ class UserController extends Controller
             "first_name"     => ['required','string', 'max:255'],
             "last_name"      => ['required','string', 'max:255'],
             "email"         => ['required','unique:users','email','string'],
-            "password"      => ['required', 'confirmed', new \Laravel\Fortify\Rules\Password, 'string'],
-            'national_id'   => ['required'],
+            "password"      => ['required', 'confirmed', new Password, 'string'],
+            'national_id'   => ['required','unique:users'],
             'role_id'       => ['required'],
             'phone_number'  => ['required', 'unique:users'],
         ]);
@@ -119,11 +122,29 @@ class UserController extends Controller
      *
      * @param  \Illuminate\Http\Request  $request
      * @param  int  $id
-     * @return \Illuminate\Http\Response
+     * @return \Illuminate\Http\JsonResponse
      */
-    public function update(Request $request, $id)
+    public function update(Request $request)
     {
-        //
+        $user = User::find(Auth::id());
+        $request->validate([
+            "first_name"     => ['required','string', 'max:255'],
+            "last_name"      => ['required','string', 'max:255'],
+            "email"         => ['required','email','string', Rule::unique('users')->ignore(Auth::id())],
+            'national_id'   => ['required', Rule::unique('users')->ignore(Auth::id())],
+            'phone_number'  => ['required', Rule::unique('users')->ignore(Auth::id())],
+        ]);
+
+        $user->update([
+            "first_name"     => ucwords($request->first_name),
+            "middle_name"    => ucwords($request->middle_name),
+            "last_name"      => ucwords($request->last_name),
+            "email"         => $request->email,
+            "phone_number"  => $request->phone_number,
+            "national_id"   => $request->national_id,
+        ]);
+
+        return response()->json([]);
     }
 
     /**

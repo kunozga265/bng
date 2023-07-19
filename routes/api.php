@@ -30,7 +30,12 @@ Route::group(['prefix' => '1.0'],function () {
         Route::post('/register', [
             "uses" => "App\Http\Controllers\API\V1_0\UserController@register",
             'roles' => ['administrator']
-        ]);
+        ])->middleware('auth:sanctum');
+
+        Route::post('/update', [
+            "uses" => "App\Http\Controllers\API\V1_0\UserController@update",
+            'roles' => ['administrator']
+        ])->middleware('auth:sanctum');
     });
 
     //Protected Routes
