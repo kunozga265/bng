@@ -73,7 +73,7 @@ class UserController extends Controller
             "email"         => $request->email,
             "phone_number"  => $request->phone_number,
             "password"      => bcrypt($request->password),
-            "national_id"   => $request->national_id,
+            "national_id"   => strtoupper($request->national_id),
             "role_id"       => $request->role_id,
         ]);
 
@@ -166,11 +166,12 @@ class UserController extends Controller
     {
         $user = User::find(Auth::id());
         $request->validate([
-            "first_name"     => ['required','string', 'max:255'],
-            "last_name"      => ['required','string', 'max:255'],
+            "first_name"    => ['required','string', 'max:255'],
+            "last_name"     => ['required','string', 'max:255'],
             "email"         => ['required','email','string', Rule::unique('users')->ignore(Auth::id())],
             'national_id'   => ['required', Rule::unique('users')->ignore(Auth::id())],
             'phone_number'  => ['required', Rule::unique('users')->ignore(Auth::id())],
+            "device_name"   => ['required','string', 'max:255'],
         ]);
 
         $user->update([
@@ -179,10 +180,15 @@ class UserController extends Controller
             "last_name"      => ucwords($request->last_name),
             "email"         => $request->email,
             "phone_number"  => $request->phone_number,
-            "national_id"   => $request->national_id,
+            "national_id"   => strtoupper($request->national_id),
         ]);
 
-        return response()->json([]);
+        $token=$user->createToken($request->device_name)->plainTextToken;
+
+        return response()->json([
+            'user'  =>  new UserResource($user),
+            'token' =>  $token
+        ]);
     }
 
     /**
