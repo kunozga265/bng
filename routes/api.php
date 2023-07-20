@@ -48,6 +48,7 @@ Route::group(['prefix' => '1.0'],function () {
 
         Route::group(['prefix' => 'sites'], function () {
             Route::get('/', [SiteController::class, 'index']);
+            Route::post('/', [SiteController::class, 'store']);
             Route::get('/{id}', [SiteController::class, 'show']);
             Route::get('/{id}/plots', [SiteController::class, 'plots']);
         });

@@ -15,6 +15,7 @@ return new class extends Migration
     {
         Schema::create('sites', function (Blueprint $table) {
             $table->id();
+
             $table->string("name");
             $table->double("plot_width");
             $table->double("plot_height");

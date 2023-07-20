@@ -21,8 +21,11 @@ class Site extends Model
 
     protected $fillable=[
         'name',
+        'plot_width',
+        'plot_height',
+        'plot_price',
+        'layout',
         'location',
         'district',
-        'map',
     ];
 }

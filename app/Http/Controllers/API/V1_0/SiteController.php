@@ -9,6 +9,8 @@ use App\Http\Resources\SiteResource;
 use App\Models\Notification;
 use App\Models\Site;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Storage;
+use Psy\Readline\Hoa\FileException;
 
 class SiteController extends Controller
 {
@@ -43,16 +45,35 @@ class SiteController extends Controller
     public function store(Request $request)
     {
         $request->validate([
-           'name'       => 'required',
-           'location'   => 'required',
-           'district'   => 'required',
+           'name'           => 'required',
+           'plot_width'     => 'required',
+           'plot_height'    => 'required',
+           'plot_price'     => 'required',
+           'layout'         => 'required',
+           'district'       => 'required',
         ]);
 
+        //Upload layout
+        $file=$request->file('layout');
+        $filename=$request->name."-".uniqid().".".$file->extension();
+        try {
+            $file->move(public_path('assets/files/'),$filename);
+            $layout="assets/files/$filename";
+        }catch (FileException $exception){
+            //catch file exception
+            return response()->json([
+                'message' => $exception,
+            ],501);
+        }
+
         $site = Site::create([
-           'name'       => $request->name,
-           'location'   => $request->location,
-           'district'   => $request->district,
-           'map'        => $request->map,
+            'name'           => $request->name,
+            'plot_width'     => $request->plot_width,
+            'plot_height'    => $request->plot_height,
+            'plot_price'     => $request->plot_price,
+            'location'       => $request->location,
+            'district'       => $request->district,
+            'layout'         => $layout,
         ]);
 
         Notification::create([
@@ -61,7 +82,7 @@ class SiteController extends Controller
         ]);
 
         return response()->json([
-           'site'       => new SiteResource($site),
+//           'site'       => new SiteResource($site),
            'message'    => "Successfully added"
         ]);
     }
@@ -141,8 +162,16 @@ class SiteController extends Controller
         return response()->json([
             'message'   => "Successfully deleted"
         ]);
+    }
 
-
-
+    private function getExtension($explodedImage)
+    {
+        $imageExtensionDecode=explode('/',$explodedImage[0]);
+        $imageExtension=explode(';',$imageExtensionDecode[1]);
+        $lowercaseExt=strtolower($imageExtension[0]);
+        if($lowercaseExt=='jpeg')
+            return 'jpg';
+        else
+            return $lowercaseExt;
     }
 }
