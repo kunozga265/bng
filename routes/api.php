@@ -54,6 +54,7 @@ Route::group(['prefix' => '1.0'],function () {
         });
 
         Route::group(['prefix' => 'plots'], function () {
+            Route::post('/', [PlotController::class, 'store']);
             Route::post('/negotiate/{id}', [PlotController::class, 'negotiate']);
             Route::post('/cancel-negotiation/{id}', [PlotController::class, 'cancelNegotiation']);
             Route::post('/sell/{id}', [PlotController::class, 'sell']);

@@ -19,8 +19,9 @@ class Plot extends Model
         return $this->belongsTo(Site::class);
     }
 
-    protected $fillable=[
+    protected $fillable = [
         'name',
+        'hectare',
         'status',
         'site_id',
         'user_id',

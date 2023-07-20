@@ -52,18 +52,19 @@ class PlotController extends Controller
         $request->validate([
            'name'           => 'required',
            'site_id'        => 'required',
+           'hectare'        => 'required',
 //           'coordinates'    => 'required',
         ]);
 
         $plot = Plot::create([
             'name'          => $request->name,
+            'hectare'       => $request->hectare,
             'status'        => 0,
             'site_id'       => $request->site_id,
-            'coordinates'   => $request->coordinates,
         ]);
 
         return response()->json([
-           'plot'       => new PlotResource($plot),
+//           'plot'       => new PlotResource($plot),
            'message'    => "Successfully added"
         ]);
     }
