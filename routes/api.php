@@ -2,6 +2,7 @@
 
 use App\Http\Controllers\API\V1_0\AppController;
 use App\Http\Controllers\API\V1_0\BookingController;
+use App\Http\Controllers\API\V1_0\NotificationController;
 use App\Http\Controllers\API\V1_0\PlotController;
 use App\Http\Controllers\API\V1_0\SiteController;
 use App\Http\Controllers\API\V1_0\UserController;
@@ -63,8 +64,9 @@ Route::group(['prefix' => '1.0'],function () {
             Route::get('/{id}', [BookingController::class, 'indexBySite']);
             Route::post('/', [BookingController::class, 'store']);
             Route::delete('/{id}', [BookingController::class, 'destroy']);
-
         });
+
+        Route::post("/notifications", [NotificationController::class, 'index']);
 
     });
 
