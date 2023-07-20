@@ -53,7 +53,29 @@ class SiteController extends Controller
            'district'       => 'required',
         ]);
 
+
         //Upload layout
+        $file=$request->layout;
+
+       /* $explodedFile=explode(',',$file);
+        dd($file, $explodedFile);
+
+        //develop name
+        $ext=$this->getExtension($explodedFile);*/
+
+        $filename="assets/files/".$request->name."-".uniqid().".pdf";
+
+        try {
+            Storage::disk('public_uploads')->put(
+                $filename, file_get_contents($file)
+            );
+        } catch (\RuntimeException $e) {
+            return response()->json([
+                'message' => "Failed to upload: $e",
+            ], 501);
+        }
+
+       /* //Upload layout
         $file=$request->file('layout');
         $filename=$request->name."-".uniqid().".".$file->extension();
         try {
@@ -64,7 +86,7 @@ class SiteController extends Controller
             return response()->json([
                 'message' => $exception,
             ],501);
-        }
+        }*/
 
         $site = Site::create([
             'name'           => $request->name,
@@ -73,7 +95,7 @@ class SiteController extends Controller
             'plot_price'     => $request->plot_price,
             'location'       => $request->location,
             'district'       => $request->district,
-            'layout'         => $layout,
+            'layout'         => $filename,
         ]);
 
         Notification::create([
