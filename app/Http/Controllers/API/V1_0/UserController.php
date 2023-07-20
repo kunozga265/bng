@@ -6,6 +6,7 @@ use App\Http\Controllers\Controller;
 use App\Http\Controllers\NotificationController;
 use App\Http\Controllers\ReportController;
 use App\Http\Resources\UserResource;
+use App\Models\Notification;
 use App\Models\Role;
 use App\Models\User;
 use Illuminate\Http\Request;
@@ -75,6 +76,11 @@ class UserController extends Controller
             "password"      => bcrypt($request->password),
             "national_id"   => strtoupper($request->national_id),
             "role_id"       => $request->role_id,
+        ]);
+
+        Notification::create([
+            'type'      => 'NEW_USER',
+            'message'   => $user->firstName." ". $user->lastName . " has been added to the system.",
         ]);
 
 //        $token=$user->createToken($request->device_name)->plainTextToken;

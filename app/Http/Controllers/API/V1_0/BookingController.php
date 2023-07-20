@@ -6,6 +6,7 @@ use App\Http\Controllers\Controller;
 use App\Http\Resources\BookingCollection;
 use App\Http\Resources\BookingResource;
 use App\Models\Booking;
+use App\Models\Notification;
 use App\Models\Site;
 use App\Models\User;
 use Carbon\Carbon;
@@ -76,6 +77,18 @@ class BookingController extends Controller
             'site_id'    => $site->id,
         ]);
 
+        Notification::create([
+            'type'      => 'NEW_BOOKING',
+            'message'   => $booking->user->firstName." ". $booking->user->lastName . " has scheduled a visit at "
+                .$site->name." on "
+                .date("jS F Y", $from)
+                ." from"
+                .date("H:i", $from)
+                ." to"
+                .date("H:i", $to)
+                ."."
+        ]);
+
         return response()->json([
 //            'booking' => new BookingResource($booking),
             'message' => "Successfully booked"
@@ -115,7 +128,19 @@ class BookingController extends Controller
     {
         $user = User::find(Auth::id());
         $booking = $user->bookings()->findOrFail($id);
-//        $booking = Booking::findOrFail($id);
+
+        Notification::create([
+            'type'      => 'REMOVE_BOOKING',
+            'message'   => $booking->user->firstName." ". $booking->user->lastName . " has cancelled their scheduled a visit at "
+                .$booking->site->name." on "
+                .date("jS F Y", $booking->from)
+                ." from"
+                .date("H:i", $booking->from)
+                ." to"
+                .date("H:i", $booking->to)
+                ."."
+        ]);
+
         $booking->delete();
 
         return response()->json([

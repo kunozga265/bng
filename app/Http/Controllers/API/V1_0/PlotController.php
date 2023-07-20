@@ -4,6 +4,7 @@ namespace App\Http\Controllers\API\V1_0;
 
 use App\Http\Controllers\Controller;
 use App\Http\Resources\PlotResource;
+use App\Models\Notification;
 use App\Models\Plot;
 use App\Models\Site;
 use App\Models\User;
@@ -82,6 +83,12 @@ class PlotController extends Controller
             'user_id'       => Auth::id(),
         ]);
 
+        Notification::create([
+            'type'      => 'PLOT_NEGOTIATE',
+            'message'   => $plot->user->firstName." ".$plot->user->lastName ." is currently negotiating for "
+                .$plot->name. " under " .$plot->site->name
+        ]);
+
         return response()->json([
 //            'plot'       => new PlotResource($plot),
             'message'    => "Successfully updated. Plot under negotiation."
@@ -102,6 +109,12 @@ class PlotController extends Controller
         $plot->update([
             'status'        => self::AVAILABLE_STATUS,
             'user_id'       => null,
+        ]);
+
+        Notification::create([
+            'type'      => 'PLOT_CANCEL_NEGOTIATION',
+            'message'   => "Negotiations for "
+                .$plot->name. " under " .$plot->site->name. " have been cancelled."
         ]);
 
         return response()->json([
@@ -127,6 +140,11 @@ class PlotController extends Controller
         $plot->update([
             'status'        => self::SOLD_STATUS,
             'user_id'       => $request->user_id,
+        ]);
+
+        Notification::create([
+            'type'      => 'PLOT_SELL',
+            'message'   => $plot->name. " under " .$plot->site->name. " has been sold by ". $plot->user->firstName. " " .$plot->user->lastName
         ]);
 
         return response()->json([
@@ -191,6 +209,12 @@ class PlotController extends Controller
     public function destroy($id)
     {
         $plot=Plot::findOrFail($id);
+
+        Notification::create([
+            'type'      => 'PLOT_DELETE',
+            'message'   => $plot->name. " under " .$plot->site->name. " has been removed"
+        ]);
+
         $plot->delete();
         return response()->json([
             'message'    => "Successfully deleted"

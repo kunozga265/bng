@@ -18,9 +18,9 @@ class PlotFactory extends Factory
     {
         return [
             "name"=> fake()->city(),
-            "status"=>fake()->numberBetween(1,3),
+            "status"=>1,
             "hectare"=>fake()->randomFloat(5,0.5,3),
-            "site_id"=>fake()->numberBetween(1,20),
+            "site_id"=>fake()->numberBetween(1,5),
 //            "user_id"=>"",
         ];
     }

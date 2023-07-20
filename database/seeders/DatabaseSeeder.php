@@ -16,15 +16,8 @@ class DatabaseSeeder extends Seeder
      */
     public function run()
     {
-        // \App\Models\User::factory(10)->create();
-
-        // \App\Models\User::factory()->create([
-        //     'name' => 'Test User',
-        //     'email' => 'test@example.com',
-        // ]);
-
-        Site::factory(20)->create();
-        Plot::factory(500)->create();
+        Site::factory(5)->create();
+        Plot::factory(100)->create();
         $this->call(UserTableSeeder::class);
         $this->call(RoleTableSeeder::class);
     }

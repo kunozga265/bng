@@ -6,6 +6,7 @@ use App\Http\Controllers\Controller;
 use App\Http\Resources\PlotResource;
 use App\Http\Resources\SiteCollection;
 use App\Http\Resources\SiteResource;
+use App\Models\Notification;
 use App\Models\Site;
 use Illuminate\Http\Request;
 
@@ -54,6 +55,11 @@ class SiteController extends Controller
            'map'        => $request->map,
         ]);
 
+        Notification::create([
+            'type'      => 'NEW_SITE',
+            'message'   => $site->name ." Site has been added to the system."
+        ]);
+
         return response()->json([
            'site'       => new SiteResource($site),
            'message'    => "Successfully added"
@@ -99,6 +105,11 @@ class SiteController extends Controller
             'map'        => $request->map,
         ]);
 
+        Notification::create([
+            'type'      => 'UPDATE_SITE',
+            'message'   => "Detail for ". $site->name ." Site has been updated."
+        ]);
+
         return response()->json([
             'site'   => new SiteResource($site),
             'message'   => "Successfully updated"
@@ -114,12 +125,18 @@ class SiteController extends Controller
     public function destroy($id)
     {
         $site = Site::findOrFail($id);
-        $site->delete();
 
         //delete plots under this site
         foreach ($site->plots as $plot) {
             $plot->delete();
         }
+
+        Notification::create([
+            'type'      => 'REMOVE_SITE',
+            'message'   => $site->name ." Site has been removed from the system."
+        ]);
+
+        $site->delete();
 
         return response()->json([
             'message'   => "Successfully deleted"
