@@ -4,9 +4,11 @@ namespace App\Http\Controllers\API\V1_0;
 
 use App\Http\Controllers\Controller;
 use App\Http\Resources\BookingResource;
+use App\Http\Resources\NotificationResource;
 use App\Http\Resources\PlotResource;
 use App\Http\Resources\SiteResource;
 use App\Models\Booking;
+use App\Models\Notification;
 use App\Models\Plot;
 use App\Models\Site;
 use App\Models\User;
@@ -29,6 +31,7 @@ class AppController extends Controller
 
         $now = Carbon::now()->getTimestamp();
         $bookings = Booking::where('from','>=', $now)->orderBy("from","asc")->get();
+        $notifications = Notification::latest()->get();
 
         if ($user->hasRole("administrator"))
             $plots = Plot::where('status',2)->limit(20)->get();
@@ -36,9 +39,10 @@ class AppController extends Controller
             $plots = $user->plots()->where('status',2)->limit(20)->get();
 
         return response()->json([
-           'sites'      => SiteResource::collection($sites),
-           'plots'      => PlotResource::collection($plots),
-           'bookings'   => BookingResource::collection($bookings)
+           'sites'          => SiteResource::collection($sites),
+           'plots'          => PlotResource::collection($plots),
+           'bookings'       => BookingResource::collection($bookings),
+           'notifications'  => NotificationResource::collection($notifications),
         ]);
     }
 }

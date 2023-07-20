@@ -79,13 +79,13 @@ class BookingController extends Controller
 
         Notification::create([
             'type'      => 'NEW_BOOKING',
-            'message'   => $booking->user->firstName." ". $booking->user->lastName . " has scheduled a visit at "
+            'message'   => $booking->user->first_name." ". $booking->user->last_name . " has scheduled a visit at "
                 .$site->name." on "
                 .date("jS F Y", $from)
-                ." from"
-                .date("H:i", $from)
-                ." to"
-                .date("H:i", $to)
+                ." from "
+                .Carbon::createFromTimestamp($from,'Africa/Lusaka')->format('H:i')
+                ." to "
+                .Carbon::createFromTimestamp($to,'Africa/Lusaka')->format('H:i')
                 ."."
         ]);
 
@@ -131,13 +131,13 @@ class BookingController extends Controller
 
         Notification::create([
             'type'      => 'REMOVE_BOOKING',
-            'message'   => $booking->user->firstName." ". $booking->user->lastName . " has cancelled their scheduled a visit at "
+            'message'   => $booking->user->first_name." ". $booking->user->last_name . " has cancelled their scheduled a visit at "
                 .$booking->site->name." on "
                 .date("jS F Y", $booking->from)
                 ." from"
-                .date("H:i", $booking->from)
-                ." to"
-                .date("H:i", $booking->to)
+                .Carbon::createFromTimestamp($booking->from,'Africa/Lusaka')->format('H:i')
+                ." to "
+                .Carbon::createFromTimestamp($booking->to,'Africa/Lusaka')->format('H:i')
                 ."."
         ]);
 

@@ -85,7 +85,7 @@ class PlotController extends Controller
 
         Notification::create([
             'type'      => 'PLOT_NEGOTIATE',
-            'message'   => $plot->user->firstName." ".$plot->user->lastName ." is currently negotiating for "
+            'message'   => $plot->user->first_name." ".$plot->user->last_name ." is currently negotiating for "
                 .$plot->name. " under " .$plot->site->name
         ]);
 
@@ -144,7 +144,7 @@ class PlotController extends Controller
 
         Notification::create([
             'type'      => 'PLOT_SELL',
-            'message'   => $plot->name. " under " .$plot->site->name. " has been sold by ". $plot->user->firstName. " " .$plot->user->lastName
+            'message'   => $plot->name. " under " .$plot->site->name. " has been sold by ". $plot->user->first_name. " " .$plot->user->last_name
         ]);
 
         return response()->json([

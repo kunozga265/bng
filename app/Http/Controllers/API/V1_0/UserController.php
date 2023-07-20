@@ -80,7 +80,7 @@ class UserController extends Controller
 
         Notification::create([
             'type'      => 'NEW_USER',
-            'message'   => $user->firstName." ". $user->lastName . " has been added to the system.",
+            'message'   => $user->first_name." ". $user->last_name . " has been added to the system.",
         ]);
 
 //        $token=$user->createToken($request->device_name)->plainTextToken;
