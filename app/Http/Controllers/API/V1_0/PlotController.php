@@ -59,7 +59,7 @@ class PlotController extends Controller
         $plot = Plot::create([
             'name'          => $request->name,
             'hectare'       => $request->hectare,
-            'status'        => 0,
+            'status'        => 1,
             'site_id'       => $request->site_id,
         ]);
 
