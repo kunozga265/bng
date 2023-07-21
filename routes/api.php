@@ -49,12 +49,14 @@ Route::group(['prefix' => '1.0'],function () {
         Route::group(['prefix' => 'sites'], function () {
             Route::get('/', [SiteController::class, 'index']);
             Route::post('/', [SiteController::class, 'store']);
+            Route::post('/{id}', [SiteController::class, 'update']);
             Route::get('/{id}', [SiteController::class, 'show']);
             Route::get('/{id}/plots', [SiteController::class, 'plots']);
         });
 
         Route::group(['prefix' => 'plots'], function () {
             Route::post('/', [PlotController::class, 'store']);
+            Route::post('/{id}', [PlotController::class, 'update']);
             Route::post('/negotiate/{id}', [PlotController::class, 'negotiate']);
             Route::post('/cancel-negotiation/{id}', [PlotController::class, 'cancelNegotiation']);
             Route::post('/sell/{id}', [PlotController::class, 'sell']);

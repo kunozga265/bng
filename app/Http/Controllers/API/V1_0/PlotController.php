@@ -182,21 +182,17 @@ class PlotController extends Controller
 
         $request->validate([
             'name'           => 'required',
-            'site_id'        => 'required',
-            'status'         => 'required',
-//           'coordinates'    => 'required',
+            'hectare'        => 'required',
         ]);
 
         $plot->update([
             'name'          => $request->name,
-            'status'        => $request->status,
-            'site_id'       => $request->site_id,
-            'coordinates'   => $request->coordinates,
+            'hectare'       => $request->hectare,
         ]);
 
         return response()->json([
-            'plot'       => new PlotResource($plot),
-            'message'    => "Successfully update"
+//            'plot'       => new PlotResource($plot),
+            'message'    => "Successfully updated"
         ]);
 
     }

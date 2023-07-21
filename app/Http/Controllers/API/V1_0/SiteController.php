@@ -53,16 +53,8 @@ class SiteController extends Controller
            'district'       => 'required',
         ]);
 
-
         //Upload layout
         $file=$request->layout;
-
-       /* $explodedFile=explode(',',$file);
-        dd($file, $explodedFile);
-
-        //develop name
-        $ext=$this->getExtension($explodedFile);*/
-
         $filename="assets/files/".$request->name."-".uniqid().".pdf";
 
         try {
@@ -74,19 +66,6 @@ class SiteController extends Controller
                 'message' => "Failed to upload: $e",
             ], 501);
         }
-
-       /* //Upload layout
-        $file=$request->file('layout');
-        $filename=$request->name."-".uniqid().".".$file->extension();
-        try {
-            $file->move(public_path('assets/files/'),$filename);
-            $layout="assets/files/$filename";
-        }catch (FileException $exception){
-            //catch file exception
-            return response()->json([
-                'message' => $exception,
-            ],501);
-        }*/
 
         $site = Site::create([
             'name'           => $request->name,
@@ -136,17 +115,42 @@ class SiteController extends Controller
         $site = Site::findOrFail($id);
 
         $request->validate([
-            'name'       => 'required',
-            'location'   => 'required',
-            'district'   => 'required',
+            'name'           => 'required',
+            'plot_width'     => 'required',
+            'plot_height'    => 'required',
+            'plot_price'     => 'required',
+            'district'       => 'required',
         ]);
 
         $site->update([
-            'name'       => $request->name,
-            'location'   => $request->location,
-            'district'   => $request->district,
-            'map'        => $request->map,
+            'name'           => $request->name,
+            'plot_width'     => $request->plot_width,
+            'plot_height'    => $request->plot_height,
+            'plot_price'     => $request->plot_price,
+            'location'       => $request->location,
+            'district'       => $request->district,
         ]);
+
+        //Upload layout
+        if(isset($request->layout)) {
+            $file = $request->layout;
+            $filename = "assets/files/" . $request->name . "-" . uniqid() . ".pdf";
+
+            try {
+                Storage::disk('public_uploads')->put(
+                    $filename, file_get_contents($file)
+                );
+
+                $site->update([
+                    'layout' => $filename
+                ]);
+
+            } catch (\RuntimeException $e) {
+                return response()->json([
+                    'message' => "Site details uploaded but failed to upload layout",
+                ], 501);
+            }
+        }
 
         Notification::create([
             'type'      => 'UPDATE_SITE',
