@@ -77,10 +77,13 @@ class SiteController extends Controller
             'layout'         => $filename,
         ]);
 
+        $message = $site->name ." Site has been added to the system.";
         Notification::create([
             'type'      => 'NEW_SITE',
-            'message'   => $site->name ." Site has been added to the system."
+            'message'   => $message
         ]);
+
+        (new AppController())->pushNotification("New Site", $message);
 
         return response()->json([
 //           'site'       => new SiteResource($site),
@@ -152,10 +155,13 @@ class SiteController extends Controller
             }
         }
 
+        $message = "Details for ". $site->name ." Site have been updated.";
         Notification::create([
             'type'      => 'UPDATE_SITE',
-            'message'   => "Details for ". $site->name ." Site have been updated."
+            'message'   => $message
         ]);
+
+        (new AppController())->pushNotification("Site Update", $message);
 
         return response()->json([
             'site'   => new SiteResource($site),
@@ -182,10 +188,13 @@ class SiteController extends Controller
             $booking->delete();
         }
 
+        $message = $site->name ." Site has been removed from the system.";
         Notification::create([
             'type'      => 'REMOVE_SITE',
-            'message'   => $site->name ." Site has been removed from the system."
+            'message'   => $message
         ]);
+
+        (new AppController())->pushNotification("Site Removed", $message);
 
         $site->delete();
 

@@ -77,17 +77,20 @@ class BookingController extends Controller
             'site_id'    => $site->id,
         ]);
 
+        $message = $booking->user->first_name." ". $booking->user->last_name . " has scheduled a visit at "
+            .$site->name." on "
+            .date("jS F Y", $from)
+            ." from "
+            .Carbon::createFromTimestamp($from,'Africa/Lusaka')->format('H:i')
+            ." to "
+            .Carbon::createFromTimestamp($to,'Africa/Lusaka')->format('H:i')
+            .".";
         Notification::create([
             'type'      => 'NEW_BOOKING',
-            'message'   => $booking->user->first_name." ". $booking->user->last_name . " has scheduled a visit at "
-                .$site->name." on "
-                .date("jS F Y", $from)
-                ." from "
-                .Carbon::createFromTimestamp($from,'Africa/Lusaka')->format('H:i')
-                ." to "
-                .Carbon::createFromTimestamp($to,'Africa/Lusaka')->format('H:i')
-                ."."
+            'message'   => $message
         ]);
+
+        (new AppController())->pushNotification("New Scheduled Visit", $message);
 
         return response()->json([
 //            'booking' => new BookingResource($booking),
@@ -129,17 +132,20 @@ class BookingController extends Controller
         $user = User::find(Auth::id());
         $booking = $user->bookings()->findOrFail($id);
 
+        $message = $booking->user->first_name." ". $booking->user->last_name . " has cancelled their scheduled a visit at "
+            .$booking->site->name." on "
+            .date("jS F Y", $booking->from)
+            ." from"
+            .Carbon::createFromTimestamp($booking->from,'Africa/Lusaka')->format('H:i')
+            ." to "
+            .Carbon::createFromTimestamp($booking->to,'Africa/Lusaka')->format('H:i')
+            .".";
         Notification::create([
             'type'      => 'REMOVE_BOOKING',
-            'message'   => $booking->user->first_name." ". $booking->user->last_name . " has cancelled their scheduled a visit at "
-                .$booking->site->name." on "
-                .date("jS F Y", $booking->from)
-                ." from"
-                .Carbon::createFromTimestamp($booking->from,'Africa/Lusaka')->format('H:i')
-                ." to "
-                .Carbon::createFromTimestamp($booking->to,'Africa/Lusaka')->format('H:i')
-                ."."
+            'message'   => $message
         ]);
+
+        (new AppController())->pushNotification("Scheduled Visit Cancelled", $message);
 
         $booking->delete();
 

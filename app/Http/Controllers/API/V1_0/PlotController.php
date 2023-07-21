@@ -84,11 +84,15 @@ class PlotController extends Controller
             'user_id'       => Auth::id(),
         ]);
 
+        $message = $plot->user->first_name." ".$plot->user->last_name ." is currently negotiating for "
+            .$plot->name. " under " .$plot->site->name;
+
         Notification::create([
             'type'      => 'PLOT_NEGOTIATE',
-            'message'   => $plot->user->first_name." ".$plot->user->last_name ." is currently negotiating for "
-                .$plot->name. " under " .$plot->site->name
+            'message'   => $message
         ]);
+
+        (new AppController())->pushNotification("Plot Under Negotiation", $message);
 
         return response()->json([
 //            'plot'       => new PlotResource($plot),
@@ -112,11 +116,14 @@ class PlotController extends Controller
             'user_id'       => null,
         ]);
 
+        $message = "Negotiations for "
+            .$plot->name. " under " .$plot->site->name. " have been cancelled.";
         Notification::create([
             'type'      => 'PLOT_CANCEL_NEGOTIATION',
-            'message'   => "Negotiations for "
-                .$plot->name. " under " .$plot->site->name. " have been cancelled."
+            'message'   => $message
         ]);
+
+        (new AppController())->pushNotification("Negotiations Cancelled", $message);
 
         return response()->json([
 //            'plot'       => new PlotResource($plot),
@@ -143,10 +150,13 @@ class PlotController extends Controller
             'user_id'       => $request->user_id,
         ]);
 
+        $message = $plot->name. " under " .$plot->site->name. " has been sold by ". $plot->user->first_name. " " .$plot->user->last_name;
         Notification::create([
             'type'      => 'PLOT_SELL',
-            'message'   => $plot->name. " under " .$plot->site->name. " has been sold by ". $plot->user->first_name. " " .$plot->user->last_name
+            'message'   => $message
         ]);
+
+        (new AppController())->pushNotification("Plot Sold", $message);
 
         return response()->json([
 //            'plot'       => new PlotResource($plot),
@@ -207,10 +217,13 @@ class PlotController extends Controller
     {
         $plot=Plot::findOrFail($id);
 
+        $message = $plot->name. " under " .$plot->site->name. " has been removed";
         Notification::create([
             'type'      => 'PLOT_DELETE',
-            'message'   => $plot->name. " under " .$plot->site->name. " has been removed"
+            'message'   => $message
         ]);
+
+        (new AppController())->pushNotification("Plot Removed", $message);
 
         $plot->delete();
         return response()->json([

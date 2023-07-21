@@ -3,11 +3,7 @@
 namespace App\Http\Controllers\API\V1_0;
 
 use App\Http\Controllers\Controller;
-use App\Http\Controllers\NotificationController;
-use App\Http\Controllers\ReportController;
 use App\Http\Resources\UserResource;
-use App\Models\Notification;
-use App\Models\Role;
 use App\Models\User;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
@@ -78,10 +74,13 @@ class UserController extends Controller
             "role_id"       => $request->role_id,
         ]);
 
-        Notification::create([
+        //Unnecessary to inform everyone I think
+        /*Notification::create([
             'type'      => 'NEW_USER',
             'message'   => $user->first_name." ". $user->last_name . " has been added to the system.",
         ]);
+
+        (new AppController())->pushNotification("Site Removed", $message);*/
 
 //        $token=$user->createToken($request->device_name)->plainTextToken;
         //Email new user with credentials
