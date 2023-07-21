@@ -154,7 +154,7 @@ class SiteController extends Controller
 
         Notification::create([
             'type'      => 'UPDATE_SITE',
-            'message'   => "Detail for ". $site->name ." Site has been updated."
+            'message'   => "Details for ". $site->name ." Site have been updated."
         ]);
 
         return response()->json([
@@ -176,6 +176,10 @@ class SiteController extends Controller
         //delete plots under this site
         foreach ($site->plots as $plot) {
             $plot->delete();
+        }
+        //delete bookings
+        foreach ($site->bookings as $booking) {
+            $booking->delete();
         }
 
         Notification::create([
