@@ -41,17 +41,26 @@ Route::group(['prefix' => '1.0'],function () {
         Route::post("/update/password", [UserController::class, 'updatePassword'])->middleware('auth:sanctum');
     });
 
+    //Unprotected Routes
+    Route::get('/dashboard', [AppController::class, 'index']);
+
+    Route::get('sites/{id}/plots', [SiteController::class, 'plots']);
+
+    Route::group(['prefix' => 'bookings'], function () {
+        Route::get('/', [BookingController::class, 'index']);
+        Route::post('/', [BookingController::class, 'store']);
+        Route::get('/{id}', [BookingController::class, 'indexBySite']);
+    });
+
     //Protected Routes
     Route::group(['middleware'=>'auth:sanctum'], function () {
-
-        Route::get('/dashboard', [AppController::class, 'index']);
 
         Route::group(['prefix' => 'sites'], function () {
             Route::get('/', [SiteController::class, 'index']);
             Route::post('/', [SiteController::class, 'store']);
             Route::post('/{id}', [SiteController::class, 'update']);
             Route::get('/{id}', [SiteController::class, 'show']);
-            Route::get('/{id}/plots', [SiteController::class, 'plots']);
+            //Route::get('/{id}/plots', [SiteController::class, 'plots']);
             Route::delete('/{id}', [SiteController::class, 'destroy']);
         });
 
@@ -65,9 +74,7 @@ Route::group(['prefix' => '1.0'],function () {
         });
 
         Route::group(['prefix' => 'bookings'], function () {
-            Route::get('/', [BookingController::class, 'index']);
-            Route::get('/{id}', [BookingController::class, 'indexBySite']);
-            Route::post('/', [BookingController::class, 'store']);
+
             Route::delete('/{id}', [BookingController::class, 'destroy']);
         });
 

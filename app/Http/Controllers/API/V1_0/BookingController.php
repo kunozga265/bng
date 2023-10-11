@@ -51,6 +51,8 @@ class BookingController extends Controller
            'from'       => 'required',
            'to'         => 'required',
            'site_id'    => 'required',
+           'user_id'    => 'required',
+           'name'       => 'required',
         ]);
 
         $site = Site::findOrFail($request->site_id);
@@ -73,7 +75,8 @@ class BookingController extends Controller
         $booking = Booking::create([
             'from'       => $from,
             'to'         => $to,
-            'user_id'    => Auth::id(),
+            'name'       => $request->name,
+            'user_id'    => $request->user_id,
             'site_id'    => $site->id,
         ]);
 
@@ -85,6 +88,7 @@ class BookingController extends Controller
             ." to "
             .Carbon::createFromTimestamp($to,'Africa/Lusaka')->format('H:i')
             .".";
+
         Notification::create([
             'type'      => 'NEW_BOOKING',
             'message'   => $message
