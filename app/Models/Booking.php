@@ -20,6 +20,7 @@ class Booking extends Model
     }
 
     protected $fillable=[
+      'name',
       'user_id',
       'site_id',
       'from',
