@@ -16,9 +16,10 @@ class DatabaseSeeder extends Seeder
      */
     public function run()
     {
-        Site::factory(5)->create();
-        Plot::factory(100)->create();
+//        Site::factory(5)->create();
+//        Plot::factory(100)->create();
         $this->call(UserTableSeeder::class);
         $this->call(RoleTableSeeder::class);
+        $this->call(SiteTableSeeder::class);
     }
 }
