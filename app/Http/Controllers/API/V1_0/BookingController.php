@@ -51,7 +51,7 @@ class BookingController extends Controller
            'from'       => 'required',
            'to'         => 'required',
            'site_id'    => 'required',
-           'user_id'    => 'required',
+//           'user_id'    => 'required',
            'name'       => 'required',
         ]);
 
@@ -80,7 +80,7 @@ class BookingController extends Controller
             'site_id'    => $site->id,
         ]);
 
-        $message = $booking->user->first_name." ". $booking->user->last_name . " has scheduled a visit at "
+        $message = $booking->name . " has scheduled a visit at "
             .$site->name." on "
             .date("jS F Y", $from)
             ." from "

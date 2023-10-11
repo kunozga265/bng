@@ -19,7 +19,8 @@ class BookingResource extends JsonResource
             'site'          => new SiteResource($this->site),
             'from'          => intval($this->from),
             'to'            => intval($this->to),
-            'user'          => new UserResource($this->user),
+            'name'          => $this->name,
+            'user'          => $this->user != null ? new UserResource($this->user) : null,
         ];
     }
 }
