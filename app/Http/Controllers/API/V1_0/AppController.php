@@ -26,18 +26,18 @@ class AppController extends Controller
      */
     public function index()
     {
-        $user = User::find(Auth::id());
-
         $sites = Site::orderBy('name', 'asc')->get();
 
         $now = Carbon::now()->getTimestamp();
         $bookings = Booking::where('from','>=', $now)->orderBy("from","asc")->get();
         $notifications = Notification::latest()->get();
 
-        if ($user->hasRole("administrator"))
-            $plots = Plot::where('status',2)->limit(20)->get();
-        else
-            $plots = $user->plots()->where('status',2)->limit(20)->get();
+        $plots = Plot::where('status',2)->limit(20)->get();
+        if(Auth::check()){
+            $user = User::find(Auth::id());
+            if ($user->hasRole("agent"))
+                $plots = $user->plots()->where('status',2)->limit(20)->get();
+        }
 
         return response()->json([
            'sites'          => SiteResource::collection($sites),
